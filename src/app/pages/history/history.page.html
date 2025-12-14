@@ -1,0 +1,154 @@
+<div class="history-page">
+  <ion-header class="backdrop-blur bg-white/70">
+    <ion-toolbar>
+      <ion-title>Historial</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true">
+    <ion-refresher slot="fixed" (ionRefresh)="refreshSessions($event)">
+      <ion-refresher-content pullingText="Desliza para recargar"></ion-refresher-content>
+    </ion-refresher>
+
+    <div class="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-6">
+      <section
+        class="rounded-3xl border border-slate-200/80 bg-white/90 p-4 shadow-lg shadow-slate-900/5 backdrop-blur"
+      >
+        <div class="flex flex-col gap-1">
+          <p class="text-xs uppercase tracking-wide text-slate-500">Resumen</p>
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-baseline gap-2">
+              <span class="text-3xl font-semibold text-slate-900">
+                {{ totalHours().toFixed(2) }}h
+              </span>
+              <span class="text-sm text-slate-500">acumuladas</span>
+            </div>
+            <ion-badge color="primary" class="rounded-full px-3 py-2 text-sm font-semibold">
+              {{ sessions().length }} registro{{ sessions().length === 1 ? '' : 's' }}
+            </ion-badge>
+          </div>
+        </div>
+        <div class="mt-3 flex flex-wrap items-end gap-3">
+          <ion-input
+            class="w-40"
+            label="Desde"
+            labelPlacement="stacked"
+            type="date"
+            [value]="exportFrom()"
+            (ionChange)="onExportDateChange('from', $event.detail.value ?? null)"
+          ></ion-input>
+          <ion-input
+            class="w-40"
+            label="Hasta"
+            labelPlacement="stacked"
+            type="date"
+            [value]="exportTo()"
+            (ionChange)="onExportDateChange('to', $event.detail.value ?? null)"
+          ></ion-input>
+          <p class="text-xs text-slate-500">
+            Opcional: selecciona un rango para exportar solo esos registros.
+          </p>
+        </div>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <ion-button
+            size="small"
+            fill="solid"
+            color="light"
+            class="text-slate-800"
+            (click)="reload()"
+          >
+            <ion-icon slot="start" name="refresh-outline" aria-hidden="true"></ion-icon>
+            Recargar
+          </ion-button>
+          <ion-button
+            size="small"
+            color="primary"
+            [disabled]="!hasSessions() || exporting()"
+            (click)="exportSummary()"
+          >
+            <ion-icon slot="start" name="download-outline" aria-hidden="true"></ion-icon>
+            {{ exporting() ? 'Exportando...' : 'Exportar resumen' }}
+          </ion-button>
+          <ion-button
+            size="small"
+            color="danger"
+            (click)="confirmClearOpen.set(true)"
+            [disabled]="!hasSessions()"
+          >
+            <ion-icon slot="start" name="trash-outline" aria-hidden="true"></ion-icon>
+            Borrar todo
+          </ion-button>
+        </div>
+        @if (exportMessage()) {
+        <ion-note class="mt-2 block text-xs text-slate-600">
+          {{ exportMessage() }}
+        </ion-note>
+        }
+      </section>
+
+      @if (hasSessions()) {
+      <ion-list
+        class="rounded-3xl border border-slate-200/80 bg-white/90 shadow-lg shadow-slate-900/5 backdrop-blur"
+      >
+        @for (session of sessions(); track trackById($index, session)) {
+        <ion-item
+          lines="full"
+          class="group/item flex-col gap-2 px-4 py-3"
+          [detail]="false"
+          [button]="false"
+        >
+          <div class="flex w-full flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-col gap-1">
+              <p class="text-sm font-semibold text-slate-900">
+                {{ formatDateTime(session.startIso) }}
+              </p>
+              <p class="text-xs text-slate-600">Termina: {{ formatDateTime(session.endIso) }}</p>
+            </div>
+            <ion-badge
+              color="tertiary"
+              class="rounded-full px-3 py-2 text-sm font-semibold whitespace-nowrap self-start sm:self-center"
+            >
+              {{ session.durationHours.toFixed(2) }} h
+            </ion-badge>
+          </div>
+          <div class="flex w-full flex-wrap items-center justify-between gap-2">
+            <ion-note class="text-xs text-slate-500">
+              Guardado: {{ session.createdAtIso | date : 'short' }}
+            </ion-note>
+            <ion-button
+              size="small"
+              color="danger"
+              fill="clear"
+              (click)="deleteSession(session.id)"
+              [disabled]="deletingId() === session.id"
+              class="shrink-0"
+            >
+              <ion-icon slot="start" name="trash-outline" aria-hidden="true"></ion-icon>
+              {{ deletingId() === session.id ? 'Eliminando...' : 'Eliminar' }}
+            </ion-button>
+          </div>
+        </ion-item>
+        }
+      </ion-list>
+      } @else {
+      <div
+        class="empty-state flex flex-col items-center justify-center rounded-3xl border border-dashed border-slate-300 bg-white/70 px-6 py-12 text-center text-slate-600"
+      >
+        <ion-icon name="warning-outline" size="large" aria-hidden="true"></ion-icon>
+        <p class="mt-3 text-base font-semibold text-slate-800">Sin registros</p>
+        <p class="max-w-md text-sm text-slate-600">
+          Aun no hay sesiones guardadas. Registra tu primera jornada para ver el historial aqui.
+        </p>
+      </div>
+      }
+    </div>
+  </ion-content>
+
+  <ion-alert
+    header="Borrar historial"
+    message="Esta accion eliminara todos los registros. Deseas continuar?"
+    [isOpen]="confirmClearOpen()"
+    (didDismiss)="confirmClearOpen.set(false)"
+    [buttons]="alertButtons"
+  ></ion-alert>
+</div>

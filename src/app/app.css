@@ -1,0 +1,50 @@
+.tab-active {
+  --color: #667eea;
+}
+
+ion-tab-bar {
+  --background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  padding: 12px 0;
+  padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  margin-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+ion-tab-bar::part(container) {
+  margin-bottom: max(6px, env(safe-area-inset-bottom, 0px));
+}
+
+ion-tab-button {
+  --color: #64748b;
+  --color-selected: #667eea;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+ion-tab-button::part(native) {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+ion-tab-button.tab-selected::part(native) {
+  transform: translateY(-2px);
+}
+
+ion-tab-button ion-icon {
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+
+ion-router-outlet {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+ion-router-outlet > * {
+  pointer-events: auto;
+}

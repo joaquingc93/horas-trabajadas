@@ -1,59 +1,50 @@
-# HorasTrabajadas
+# Horas Trabajadas (Ionic + Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+Registro móvil de jornadas laborales con Ionic, Angular 21, Tailwind CSS 4 y almacenamiento local persistente.
 
-## Development server
+## Requisitos
+- Node.js 20+ y npm 10+ (el proyecto usa `npm@11.7.0` vía `packageManager`).
+- Ionic/Angular ya instalados mediante dependencias del proyecto.
 
-To start a local development server, run:
-
+## Instalación
 ```bash
-ng serve
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+## Ejecución de desarrollo
 ```bash
-ng generate component component-name
+npm start
+# Navega a http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+## Build de producción
 ```bash
-ng generate --help
+npm run build
+```
+Artefactos en `dist/horas-trabajadas/`.
+
+## Pruebas unitarias
+```bash
+npm test
 ```
 
-## Building
+## Características
+- Formularios reactivos con Ionic UI para capturar inicio y fin de jornada.
+- Validación de rango (fin ≥ inicio) y cálculo inmediato de horas (decimal, 2 decimales).
+- Persistencia local con `@ionic/storage-angular` (IndexedDB/localForage según plataforma).
+- Historial con resumen total, eliminación individual y borrado masivo con confirmación.
+- Navegación por pestañas (Registrar / Historial) y feedback con Toast/Alert.
+- Standalone components, señales (`signal`, `computed`), `provideIonicAngular`, Tailwind 4.
 
-To build the project run:
+## Estructura relevante
+- `src/app/app.ts` y `app.html`: shell con Ionic Tabs.
+- `src/app/pages/entry/*`: formulario y cálculo de horas.
+- `src/app/pages/history/*`: listado, totales y acciones.
+- `src/app/services/sessions-store.service.ts`: estado en señales + reglas de negocio.
+- `src/app/services/session-storage.service.ts`: persistencia en Ionic Storage.
+- `src/styles.css`: Tailwind + estilos globales Ionic.
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Configuración extra
+- Las dependencias clave (Ionic 8, Ionic Storage 4, Tailwind 4) están instaladas.
+- `provideIonicAngular` y `IonicRouteStrategy` ya se declaran en `app.config.ts`.
+- No se usan NgModules; toda la app es standalone y con ChangeDetection OnPush.

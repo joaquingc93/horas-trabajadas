@@ -1,0 +1,176 @@
+[1m[33m
+Warning: This is a simple server for use in testing or debugging Angular applications
+locally. It hasn't been reviewed for security issues.
+
+Binding this server to an open connection can result in compromising your application or
+computer. Using a different host than the one passed to the "--host" flag might result in
+websocket connection issues.
+    [39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG2011: The component 'IonInput' appears in 'imports', but is not standalone and cannot be imported directly. It must be imported via an NgModule.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.ts:47:4:
+[37m      47 │     [32mIonInput[37m,
+         ╵     [32m~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG2011: The component 'IonInput' appears in 'imports', but is not standalone and cannot be imported directly. It must be imported via an NgModule.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.ts:47:4:
+[37m      47 │     [32mIonInput[37m,
+         ╵     [32m~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG2011: The component 'IonInput' appears in 'imports', but is not standalone and cannot be imported directly. It must be imported via an NgModule.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.ts:47:4:
+[37m      47 │     [32mIonInput[37m,
+         ╵     [32m~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG2011: The component 'IonInput' appears in 'imports', but is not standalone and cannot be imported directly. It must be imported via an NgModule.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.ts:47:4:
+[37m      47 │     [32mIonInput[37m,
+         ╵     [32m~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:38:66:
+[37m      38 │ ...     (ionChange)="onExportDateChange('from', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:46:64:
+[37m      46 │ ...       (ionChange)="onExportDateChange('to', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:38:66:
+[37m      38 │ ...     (ionChange)="onExportDateChange('from', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:46:64:
+[37m      46 │ ...       (ionChange)="onExportDateChange('to', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:38:66:
+[37m      38 │ ...     (ionChange)="onExportDateChange('from', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:46:64:
+[37m      46 │ ...       (ionChange)="onExportDateChange('to', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:38:66:
+[37m      38 │ ...     (ionChange)="onExportDateChange('from', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:46:64:
+[37m      46 │ ...       (ionChange)="onExportDateChange('to', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:38:66:
+[37m      38 │ ...     (ionChange)="onExportDateChange('from', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | null'.
+  Type 'undefined' is not assignable to type 'string | null'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/pages/history/history.page.html:46:64:
+[37m      46 │ ...       (ionChange)="onExportDateChange('to', $event.detail.[32mvalue[37m)"
+         ╵                                                               [32m~~~~~[0m
+
+  Error occurs in the template of component HistoryPage.
+
+    src/app/pages/history/history.page.ts:54:15:
+[37m      54 │   templateUrl: [32m'./history.page.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
