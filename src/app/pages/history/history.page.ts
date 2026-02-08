@@ -12,16 +12,10 @@ import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import {
-  IonButton,
   IonContent,
   IonHeader,
   IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
   IonModal,
-  IonText,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
@@ -53,16 +47,10 @@ type EditFormGroup = FormGroup<{
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    IonButton,
     IonContent,
     IonHeader,
     IonIcon,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonList,
     IonModal,
-    IonText,
     IonTitle,
     IonToolbar
   ],
@@ -135,6 +123,14 @@ export class HistoryPage {
       return;
     }
     this.filterTo.set(normalized);
+  }
+
+  protected onFilterInput(type: 'from' | 'to', event: Event): void {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) {
+      return;
+    }
+    this.onFilterDateChange(type, target.value);
   }
 
   protected formatDateLabel(iso: string): string {

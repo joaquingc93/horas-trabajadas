@@ -13,28 +13,15 @@ import {
 import { startWith } from 'rxjs';
 
 import {
-  IonButton,
   IonContent,
   IonHeader,
   IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonNote,
-  IonText,
   IonTitle,
   IonToast,
-  IonToggle,
   IonToolbar
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import {
-  addCircleOutline,
-  calendarOutline,
-  moonOutline,
-  sunnyOutline,
-  timeOutline
-} from 'ionicons/icons';
+import { addCircleOutline, calendarOutline } from 'ionicons/icons';
 
 import { PreferencesService } from '../../services/preferences.service';
 import { SessionsStoreService } from '../../services/sessions-store.service';
@@ -50,18 +37,11 @@ type SessionFormGroup = FormGroup<{
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    IonButton,
     IonContent,
     IonHeader,
     IonIcon,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonNote,
-    IonText,
     IonTitle,
     IonToast,
-    IonToggle,
     IonToolbar
   ],
   templateUrl: './entry.page.html',
@@ -79,7 +59,6 @@ export class EntryPage {
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly lastSessionHours = signal<number | null>(null);
   protected readonly lastSessionIncome = signal<number | null>(null);
-  protected readonly isDarkMode = computed(() => this.preferences.darkMode());
 
   protected readonly form: SessionFormGroup = this.fb.group({
     start: this.fb.control('', { validators: [Validators.required] }),
@@ -121,10 +100,7 @@ export class EntryPage {
   constructor() {
     addIcons({
       'add-circle-outline': addCircleOutline,
-      'calendar-outline': calendarOutline,
-      'time-outline': timeOutline,
-      'moon-outline': moonOutline,
-      'sunny-outline': sunnyOutline
+      'calendar-outline': calendarOutline
     });
 
     this.form.addValidators(this.validateDateRange.bind(this));
@@ -200,10 +176,6 @@ export class EntryPage {
       return '$0.00';
     }
     return `$${value.toFixed(2)}`;
-  }
-
-  protected async onDarkModeChange(checked: boolean): Promise<void> {
-    await this.preferences.setDarkMode(checked);
   }
 
   private async initializePage(): Promise<void> {

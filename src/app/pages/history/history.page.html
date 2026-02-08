@@ -1,32 +1,37 @@
-<div class="history-page">
-  <ion-header class="history-header">
-    <ion-toolbar>
-      <ion-title>Historial de jornadas</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-header class="history-header">
+  <ion-toolbar>
+    <ion-title>Historial de jornadas</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <ion-content [fullscreen]="true">
-    <div class="history-shell">
+<ion-content [fullscreen]="true">
+  <main class="history-shell">
       <section class="filters-grid">
-        <ion-item lines="none" class="filter-field">
-          <ion-label position="stacked">Desde</ion-label>
-          <ion-input
-            type="date"
-            [value]="filterFrom()"
-            (ionChange)="onFilterDateChange('from', $event.detail.value)"
-          ></ion-input>
-          <ion-icon slot="end" name="calendar-outline" aria-hidden="true"></ion-icon>
-        </ion-item>
+        <div class="filter-field">
+          <label for="history-filter-from">Desde</label>
+          <div class="filter-input-wrap">
+            <input
+              id="history-filter-from"
+              type="date"
+              [value]="filterFrom()"
+              (input)="onFilterInput('from', $event)"
+            />
+            <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+          </div>
+        </div>
 
-        <ion-item lines="none" class="filter-field">
-          <ion-label position="stacked">Hasta</ion-label>
-          <ion-input
-            type="date"
-            [value]="filterTo()"
-            (ionChange)="onFilterDateChange('to', $event.detail.value)"
-          ></ion-input>
-          <ion-icon slot="end" name="calendar-outline" aria-hidden="true"></ion-icon>
-        </ion-item>
+        <div class="filter-field">
+          <label for="history-filter-to">Hasta</label>
+          <div class="filter-input-wrap">
+            <input
+              id="history-filter-to"
+              type="date"
+              [value]="filterTo()"
+              (input)="onFilterInput('to', $event)"
+            />
+            <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+          </div>
+        </div>
       </section>
 
       <section class="summary-grid">
@@ -48,29 +53,30 @@
       </section>
 
       <section class="actions-grid">
-        <ion-button class="action-button" [disabled]="!hasSessions() || exportingPdf()" (click)="exportPdf()">
-          <ion-icon slot="start" name="document-text-outline" aria-hidden="true"></ion-icon>
+        <button type="button" class="action-button" [disabled]="!hasSessions() || exportingPdf()" (click)="exportPdf()">
+          <ion-icon name="document-text-outline" aria-hidden="true"></ion-icon>
           {{ exportingPdf() ? 'Exportando PDF...' : 'Exportar PDF' }}
-        </ion-button>
+        </button>
 
-        <ion-button
+        <button
+          type="button"
           class="action-button"
           [disabled]="!hasSessions() || exportingExcel()"
           (click)="exportExcel()"
         >
-          <ion-icon slot="start" name="list-outline" aria-hidden="true"></ion-icon>
+          <ion-icon name="list-outline" aria-hidden="true"></ion-icon>
           {{ exportingExcel() ? 'Exportando Excel...' : 'Exportar Excel' }}
-        </ion-button>
+        </button>
       </section>
 
       @if (actionMessage()) {
-      <ion-text class="action-message" aria-live="polite">{{ actionMessage() }}</ion-text>
+      <p class="action-message" aria-live="polite">{{ actionMessage() }}</p>
       }
 
       @if (hasSessions()) {
-      <ion-list class="sessions-list">
+      <section class="sessions-list">
         @for (session of filteredSessions(); track trackById($index, session)) {
-        <ion-item lines="none" class="session-item">
+        <article class="session-item">
           <div class="session-date-col">
             <strong>{{ formatDateLabel(session.startIso) }}</strong>
             <span>{{ formatWeekDay(session.startIso) }}</span>
@@ -81,70 +87,74 @@
             <span>{{ formatCurrency(session.hourlyRate) }}/hr</span>
           </div>
 
-          <div class="session-hours-col">
+          <div class="session-side-col">
             <strong>{{ formatHours(session.durationHours) }}</strong>
             <span>{{ formatCurrency(session.totalIncome) }}</span>
-          </div>
 
-          <div class="session-actions-col">
-            <ion-button fill="clear" size="small" class="edit-button" (click)="openEditModal(session)">
-              <ion-icon name="create-outline" aria-hidden="true"></ion-icon>
-            </ion-button>
-            <ion-button
-              fill="clear"
-              size="small"
-              class="delete-button"
-              [disabled]="deletingId() === session.id"
-              (click)="deleteSession(session.id)"
-            >
-              <ion-icon name="trash-outline" aria-hidden="true"></ion-icon>
-            </ion-button>
+            <div class="session-actions-col">
+              <button
+                type="button"
+                class="edit-button"
+                (click)="openEditModal(session)"
+                aria-label="Editar sesion"
+              >
+                <ion-icon name="create-outline" aria-hidden="true"></ion-icon>
+              </button>
+              <button
+                type="button"
+                class="delete-button"
+                [disabled]="deletingId() === session.id"
+                (click)="deleteSession(session.id)"
+                aria-label="Eliminar sesion"
+              >
+                <ion-icon name="trash-outline" aria-hidden="true"></ion-icon>
+              </button>
+            </div>
           </div>
-        </ion-item>
+        </article>
         }
-      </ion-list>
+      </section>
       } @else {
       <section class="empty-state">
         <ion-icon name="list-outline" aria-hidden="true"></ion-icon>
         <p>No hay registros en el rango seleccionado.</p>
       </section>
       }
-    </div>
-  </ion-content>
+  </main>
+</ion-content>
 
-  <ion-modal [isOpen]="editModalOpen()" (didDismiss)="closeEditModal()">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Editar sesion</ion-title>
-        </ion-toolbar>
-      </ion-header>
+<ion-modal [isOpen]="editModalOpen()" (didDismiss)="closeEditModal()">
+  <ng-template>
+    <ion-header class="edit-header">
+      <ion-toolbar>
+        <ion-title>Editar sesion</ion-title>
+      </ion-toolbar>
+    </ion-header>
 
-      <ion-content>
-        <form class="edit-form" [formGroup]="editForm" (submit)="saveEdition(); $event.preventDefault()">
-          <ion-item lines="none">
-            <ion-label position="stacked">Fecha y hora de inicio</ion-label>
-            <ion-input formControlName="start" type="datetime-local"></ion-input>
-          </ion-item>
+    <ion-content>
+      <form class="edit-form" [formGroup]="editForm">
+        <div class="edit-field">
+          <label for="edit-start">Fecha y hora de inicio</label>
+          <input id="edit-start" formControlName="start" type="datetime-local" />
+        </div>
 
-          <ion-item lines="none">
-            <ion-label position="stacked">Fecha y hora de fin</ion-label>
-            <ion-input formControlName="end" type="datetime-local"></ion-input>
-          </ion-item>
+        <div class="edit-field">
+          <label for="edit-end">Fecha y hora de fin</label>
+          <input id="edit-end" formControlName="end" type="datetime-local" />
+        </div>
 
-          <ion-item lines="none">
-            <ion-label position="stacked">Tarifa por hora</ion-label>
-            <ion-input formControlName="hourlyRate" type="number" min="0" step="0.01"></ion-input>
-          </ion-item>
+        <div class="edit-field">
+          <label for="edit-rate">Tarifa por hora</label>
+          <input id="edit-rate" formControlName="hourlyRate" type="number" min="0" step="0.01" />
+        </div>
 
-          <div class="edit-actions">
-            <ion-button fill="clear" (click)="closeEditModal()" type="button">Cancelar</ion-button>
-            <ion-button [disabled]="savingEdit()" type="submit">
-              {{ savingEdit() ? 'Guardando...' : 'Guardar cambios' }}
-            </ion-button>
-          </div>
-        </form>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-</div>
+        <div class="edit-actions">
+          <button type="button" class="edit-cancel" (click)="closeEditModal()">Cancelar</button>
+          <button type="button" class="edit-save" [disabled]="savingEdit()" (click)="saveEdition()">
+            {{ savingEdit() ? 'Guardando...' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>

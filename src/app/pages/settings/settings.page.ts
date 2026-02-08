@@ -4,17 +4,9 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import {
   IonContent,
   IonHeader,
-  IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonNote,
   IonTitle,
-  IonToggle,
   IonToolbar
 } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { moonOutline, personOutline, sunnyOutline } from 'ionicons/icons';
 
 import { PreferencesService } from '../../services/preferences.service';
 
@@ -24,13 +16,7 @@ import { PreferencesService } from '../../services/preferences.service';
     CommonModule,
     IonContent,
     IonHeader,
-    IonIcon,
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonNote,
     IonTitle,
-    IonToggle,
     IonToolbar
   ],
   templateUrl: './settings.page.html',
@@ -46,26 +32,23 @@ export class SettingsPage {
   protected readonly darkMode = computed(() => this.preferences.darkMode());
 
   constructor() {
-    addIcons({
-      'person-outline': personOutline,
-      'moon-outline': moonOutline,
-      'sunny-outline': sunnyOutline
-    });
-
     void this.initialize();
   }
 
-  protected onUserNameInput(value: string | number | null | undefined): void {
-    this.userNameInput.set(typeof value === 'string' ? value : '');
-  }
-
-  protected onDefaultRateInput(value: string | number | null | undefined): void {
-    if (typeof value === 'number') {
-      this.defaultRateInput.set(value.toFixed(2));
+  protected onUserNameInput(event: Event): void {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) {
       return;
     }
+    this.userNameInput.set(target.value);
+  }
 
-    this.defaultRateInput.set(typeof value === 'string' ? value : '');
+  protected onDefaultRateInput(event: Event): void {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) {
+      return;
+    }
+    this.defaultRateInput.set(target.value);
   }
 
   protected async savePreferences(): Promise<void> {
@@ -84,9 +67,13 @@ export class SettingsPage {
     this.message.set('Preferencias actualizadas.');
   }
 
-  protected async onDarkModeChange(checked: boolean): Promise<void> {
-    await this.preferences.setDarkMode(checked);
-    this.message.set(checked ? 'Modo oscuro activado.' : 'Modo oscuro desactivado.');
+  protected async onDarkModeChange(event: Event): Promise<void> {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) {
+      return;
+    }
+    await this.preferences.setDarkMode(target.checked);
+    this.message.set(target.checked ? 'Modo oscuro activado.' : 'Modo oscuro desactivado.');
   }
 
   private async initialize(): Promise<void> {

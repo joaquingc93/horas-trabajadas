@@ -1,61 +1,52 @@
-<div class="settings-page">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Ajustes</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-header class="settings-header">
+  <ion-toolbar>
+    <ion-title>Ajustes</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <ion-content [fullscreen]="true">
-    <div class="settings-shell">
-      <section class="settings-card">
-        <h1>Preferencias Generales</h1>
+<ion-content [fullscreen]="true">
+  <main class="settings-shell">
+    <section class="settings-card">
+      <h1>Preferencias Generales</h1>
 
-        <ion-item lines="none" class="settings-item">
-          <ion-label position="stacked">Nombre de Usuario</ion-label>
-          <ion-input
+      <div class="neon-group">
+        <div class="settings-field">
+          <label for="settings-user-name">Nombre de Usuario</label>
+          <input
+            id="settings-user-name"
             [value]="userNameInput()"
             placeholder="usuario_ejemplo"
-            (ionInput)="onUserNameInput($event.detail.value)"
-            (ionBlur)="savePreferences()"
-          ></ion-input>
-          <ion-icon slot="end" name="person-outline" aria-hidden="true"></ion-icon>
-        </ion-item>
+            (input)="onUserNameInput($event)"
+            (blur)="savePreferences()"
+          />
+        </div>
 
-        <ion-item lines="none" class="settings-item">
-          <ion-label position="stacked">Tarifa por Hora por Defecto</ion-label>
-          <ion-input
+        <div class="settings-field">
+          <label for="settings-default-rate">Tarifa por Hora por Defecto</label>
+          <input
+            id="settings-default-rate"
             [value]="defaultRateInput()"
             type="number"
             min="0"
             step="0.01"
-            placeholder="$20.00"
-            (ionInput)="onDefaultRateInput($event.detail.value)"
-            (ionBlur)="savePreferences()"
-          ></ion-input>
-        </ion-item>
-      </section>
-
-      <section class="toggle-card">
-        <div>
-          <h2>Modo Oscuro</h2>
-          <p>Activa el estilo oscuro para toda la app.</p>
+            placeholder="20.00"
+            (input)="onDefaultRateInput($event)"
+            (blur)="savePreferences()"
+          />
         </div>
+      </div>
 
-        <div class="toggle-wrap">
-          <ion-icon name="moon-outline" aria-hidden="true"></ion-icon>
-          <ion-toggle
-            [checked]="darkMode()"
-            color="secondary"
-            (ionChange)="onDarkModeChange($event.detail.checked)"
-            aria-label="Activar modo oscuro"
-          ></ion-toggle>
-          <ion-icon name="sunny-outline" aria-hidden="true"></ion-icon>
-        </div>
-      </section>
+      <div class="neon-group toggle-row">
+        <span>Modo Oscuro</span>
+        <label class="switch" aria-label="Activar modo oscuro">
+          <input type="checkbox" [checked]="darkMode()" (change)="onDarkModeChange($event)" />
+          <span class="switch-track"></span>
+        </label>
+      </div>
+    </section>
 
-      @if (message()) {
-      <ion-note class="settings-message" aria-live="polite">{{ message() }}</ion-note>
-      }
-    </div>
-  </ion-content>
-</div>
+    @if (message()) {
+    <p class="settings-message" aria-live="polite">{{ message() }}</p>
+    }
+  </main>
+</ion-content>
