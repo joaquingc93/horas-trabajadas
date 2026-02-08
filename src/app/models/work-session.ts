@@ -3,6 +3,8 @@ export interface WorkSession {
   startIso: string;
   endIso: string;
   durationHours: number;
+  hourlyRate: number;
+  totalIncome: number;
   createdAtIso: string;
 }
 

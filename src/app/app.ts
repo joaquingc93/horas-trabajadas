@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
 import {
   IonApp,
   IonIcon,
@@ -8,9 +10,10 @@ import {
   IonTabButton,
   IonTabs
 } from '@ionic/angular/standalone';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { listOutline, timeOutline } from 'ionicons/icons';
+import { documentTextOutline, settingsOutline, timeOutline } from 'ionicons/icons';
+
+import { PreferencesService } from './services/preferences.service';
 
 @Component({
   selector: 'app-root',
@@ -30,10 +33,15 @@ import { listOutline, timeOutline } from 'ionicons/icons';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class App {
+  private readonly preferences = inject(PreferencesService);
+
   constructor() {
     addIcons({
+      'document-text-outline': documentTextOutline,
       'time-outline': timeOutline,
-      'list-outline': listOutline
+      'settings-outline': settingsOutline
     });
+
+    void this.preferences.ensureLoaded();
   }
 }

@@ -1,116 +1,83 @@
 <div class="entry-page">
-  <ion-header class="backdrop-blur bg-white/70">
+  <ion-header class="entry-header">
     <ion-toolbar>
-      <ion-title>Registrar jornada</ion-title>
+      <ion-title>Registrar Jornada Laboral</ion-title>
+      <div class="theme-toggle" slot="end">
+        <ion-icon name="moon-outline" aria-hidden="true"></ion-icon>
+        <ion-toggle
+          [checked]="isDarkMode()"
+          color="secondary"
+          (ionChange)="onDarkModeChange($event.detail.checked)"
+          aria-label="Cambiar modo oscuro"
+        ></ion-toggle>
+        <ion-icon name="sunny-outline" aria-hidden="true"></ion-icon>
+      </div>
     </ion-toolbar>
   </ion-header>
 
   <ion-content [fullscreen]="true">
-    <div class="mx-auto flex max-w-4xl flex-col gap-6 px-4 py-6">
-      <section
-        class="rounded-3xl border border-slate-200/80 bg-white/90 p-5 shadow-xl shadow-slate-900/5 backdrop-blur-lg"
-      >
-        <div class="flex flex-col gap-1">
-          <h1 class="text-2xl font-semibold text-slate-900">Nueva sesion</h1>
-          <p class="text-sm text-slate-600">
-            Ingresa la hora de inicio y fin. Calcularemos las horas trabajadas en cuanto la guardes.
-          </p>
+    <div class="entry-shell">
+      <section class="entry-card">
+        <div class="entry-card-header">
+          <h1>Nueva Sesion</h1>
+          <ion-button fill="clear" class="new-session" (click)="startNewSession()">
+            <ion-icon slot="start" name="add-circle-outline" aria-hidden="true"></ion-icon>
+            Nueva Sesion
+          </ion-button>
         </div>
 
-        <form
-          class="mt-4 space-y-4"
-          [formGroup]="form"
-          (submit)="saveSession(); $event.preventDefault()"
-          aria-label="Formulario de registro de jornada"
-        >
-          <ion-item
-            lines="none"
-            class="rounded-2xl border border-slate-200/70 bg-slate-50/60 px-3 py-2"
-          >
-            <ion-icon slot="start" name="calendar-outline" aria-hidden="true"></ion-icon>
-            <ion-label position="stacked">Inicio</ion-label>
-            <ion-input
-              type="datetime-local"
-              formControlName="start"
-              aria-label="Selecciona fecha y hora de inicio"
-              [clearInput]="true"
-            ></ion-input>
+        <form [formGroup]="form" (submit)="saveSession(); $event.preventDefault()" class="entry-form">
+          <ion-item lines="none" class="field-item">
+            <ion-label position="stacked">Fecha y Hora de Inicio</ion-label>
+            <ion-input type="datetime-local" formControlName="start"></ion-input>
+            <ion-icon slot="end" name="calendar-outline" aria-hidden="true"></ion-icon>
           </ion-item>
           @if (isControlInvalid('start')) {
-          <ion-note color="danger" class="px-1 text-xs font-medium">
-            Ingresa una fecha y hora de inicio valida.
-          </ion-note>
+          <ion-note color="danger">Ingresa una fecha y hora de inicio valida.</ion-note>
           }
 
-          <ion-item
-            lines="none"
-            class="rounded-2xl border border-slate-200/70 bg-slate-50/60 px-3 py-2"
-          >
-            <ion-icon slot="start" name="time-outline" aria-hidden="true"></ion-icon>
-            <ion-label position="stacked">Fin</ion-label>
-            <ion-input
-              type="datetime-local"
-              formControlName="end"
-              aria-label="Selecciona fecha y hora de fin"
-              [clearInput]="true"
-            ></ion-input>
+          <ion-item lines="none" class="field-item">
+            <ion-label position="stacked">Fecha y Hora de Fin</ion-label>
+            <ion-input type="datetime-local" formControlName="end"></ion-input>
+            <ion-icon slot="end" name="calendar-outline" aria-hidden="true"></ion-icon>
           </ion-item>
           @if (isControlInvalid('end')) {
-          <ion-note color="danger" class="px-1 text-xs font-medium">
-            Ingresa una fecha y hora de fin valida.
-          </ion-note>
-          } @if (form.errors?.['range']) {
-          <ion-note color="danger" class="px-1 text-sm font-semibold">
-            La hora de fin debe ser mayor o igual a la hora de inicio.
-          </ion-note>
+          <ion-note color="danger">Ingresa una fecha y hora de fin valida.</ion-note>
           }
 
-          <div
-            class="flex items-center justify-between rounded-2xl bg-slate-900 px-4 py-3 text-slate-50 shadow-lg shadow-slate-900/30"
-            role="status"
-            aria-live="polite"
-          >
-            <div class="flex flex-col">
-              <span class="text-sm text-slate-200">Horas calculadas</span>
-              <span class="text-base text-slate-300">Tiempo segun el rango seleccionado</span>
-            </div>
-            <span class="text-3xl font-semibold tracking-tight">
-              {{ formattedHours(durationPreview()) }}
-            </span>
-          </div>
+          <ion-item lines="none" class="field-item">
+            <ion-label position="stacked">Tarifa por Hora ($/hr)</ion-label>
+            <ion-input type="number" min="0" step="0.01" formControlName="hourlyRate"></ion-input>
+          </ion-item>
+          @if (isControlInvalid('hourlyRate')) {
+          <ion-note color="danger">La tarifa por hora debe ser numerica y positiva.</ion-note>
+          }
+
+          @if (form.errors?.['range']) {
+          <ion-note color="danger">La hora de fin debe ser mayor o igual a la hora de inicio.</ion-note>
+          }
+
+          <article class="summary-box" role="status" aria-live="polite">
+            <p>Horas Calculadas: {{ formatHours(durationPreview()) }}</p>
+            <p>Ganancias Estimadas: {{ formatCurrency(estimatedIncome()) }}</p>
+          </article>
+
+          @if (lastSessionHours() !== null && lastSessionIncome() !== null) {
+          <article class="last-saved" aria-live="polite">
+            <p>Ultima sesion guardada</p>
+            <span>{{ formatHours(lastSessionHours()) }} - {{ formatCurrency(lastSessionIncome()) }}</span>
+          </article>
+          }
 
           @if (errorMessage()) {
-          <ion-text color="danger" class="block rounded-xl bg-red-50 px-3 py-2 text-sm">
-            {{ errorMessage() }}
-          </ion-text>
+          <ion-text color="danger" class="error-message">{{ errorMessage() }}</ion-text>
           }
 
-          <ion-button
-            type="submit"
-            expand="block"
-            class="h-12 rounded-2xl text-base font-semibold"
-            [disabled]="saving()"
-          >
-            {{ saving() ? 'Guardando...' : 'Guardar sesion' }}
+          <ion-button type="submit" expand="block" class="save-button" [disabled]="saving()">
+            {{ saving() ? 'Guardando...' : 'Guardar Sesion' }}
           </ion-button>
         </form>
       </section>
-
-      @if (lastSaved()) {
-      <section class="rounded-3xl border border-indigo-200/80 bg-indigo-50/70 p-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm font-semibold text-indigo-800">Sesion guardada</p>
-            <p class="text-xs text-indigo-700">
-              Horas calculadas: {{ lastSaved()?.durationHours?.toFixed(2) }}h
-            </p>
-          </div>
-          <ion-text class="text-xs text-indigo-900">
-            {{ lastSaved()?.createdAtIso | date : 'short' }}
-          </ion-text>
-        </div>
-      </section>
-      }
     </div>
   </ion-content>
 
@@ -119,7 +86,7 @@
     [message]="toastMessage()"
     [duration]="2200"
     position="bottom"
-    color="primary"
+    color="secondary"
     (didDismiss)="toastOpen.set(false)"
     aria-live="polite"
   ></ion-toast>

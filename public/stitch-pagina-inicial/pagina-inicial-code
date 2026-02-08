@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Registrar Jornada Laboral</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Font Awesome for Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Google Fonts: Roboto -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration for Specific Colors -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Roboto', 'sans-serif'],
+          },
+          colors: {
+            primary: '#673AB7', // Deep purple from mockup
+            primaryDark: '#512DA8', // Darker shade for buttons
+            primaryLight: '#EDE7F6', // Very light purple for backgrounds
+            textDark: '#212121', // Dark grey/black for text
+            borderPurple: '#D1C4E9', // Light purple for borders
+          },
+          boxShadow: {
+            'card': '0 10px 30px -5px rgba(0, 0, 0, 0.1)',
+            'glow': '0 4px 20px rgba(103, 58, 183, 0.15)',
+            'btn': '0 4px 14px 0 rgba(103, 58, 183, 0.39)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Styles for Specific Tweaks -->
+<style data-purpose="custom-overrides">
+    body {
+      background-color: #F3F4F6; /* Light grey background matching image */
+    }
+    .input-icon-right {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9F7AEA;
+      pointer-events: none;
+    }
+    /* Hide scrollbar for a cleaner mobile app look */
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen font-sans text-gray-800 antialiased bg-gray-50 selection:bg-purple-100 selection:text-purple-900">
+<!-- BEGIN: MainContent -->
+<main class="flex-grow flex flex-col items-center px-4 pt-8 pb-24 w-full max-w-md mx-auto">
+<!-- Page Title -->
+<header class="w-full text-center pt-8 pb-6">
+<h1 class="text-lg font-medium text-black tracking-normal">Registrar Jornada Laboral</h1>
+</header>
+<!-- BEGIN: FormCard -->
+<!-- This is the main white card containing the form -->
+<section class="bg-white w-full rounded-[2rem] shadow-card p-6 flex flex-col gap-6" data-purpose="session-form-card">
+<!-- Card Header: Title and Reset Button -->
+<div class="flex justify-between items-center mb-2">
+<h2 class="text-2xl font-bold text-black">Nueva Sesión</h2>
+<button class="flex items-center gap-2 bg-purple-100 hover:bg-purple-200 text-primary py-2 px-4 rounded-xl transition-colors">
+<i class="fa-solid fa-rotate-right"></i>
+<span class="text-sm font-medium">Nueva Sesión</span>
+</button>
+</div>
+<!-- Form Inputs Container -->
+<form class="flex flex-col gap-5" data-purpose="input-fields">
+<!-- Start Date Field -->
+<div class="flex flex-col gap-1">
+<label class="text-base font-medium text-black" for="start-time">Fecha y Hora de Inicio</label>
+<div class="relative">
+<input class="w-full border border-purple-300 rounded-xl py-3 px-4 text-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all pr-10" id="start-time" type="text" value="30/01/2026 19:16"/>
+<i class="fa-regular fa-calendar text-purple-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-xl"></i>
+</div>
+</div>
+<!-- End Date Field -->
+<div class="flex flex-col gap-1">
+<label class="text-base font-medium text-black" for="end-time">Fecha y Hora de Fin</label>
+<div class="relative">
+<input class="w-full border border-purple-300 rounded-xl py-3 px-4 text-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all pr-10" id="end-time" type="text" value="30/01/2026 21:21"/>
+<i class="fa-regular fa-calendar text-purple-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-xl"></i>
+</div>
+</div>
+<!-- Hourly Rate Field -->
+<div class="flex flex-col gap-1">
+<label class="text-base font-medium text-black" for="rate">Tarifa por Hora ($/hr)</label>
+<input class="w-full border border-purple-300 rounded-xl py-3 px-4 text-gray-500 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" id="rate" step="0.01" type="number" value="20.00"/>
+</div>
+</form>
+<!-- BEGIN: SummaryBox -->
+<!-- Results container with purple glow -->
+<div class="border border-purple-300 rounded-2xl p-6 shadow-[0_4px_20px_rgba(103,58,183,0.1)] flex flex-col gap-3 bg-white mt-4" data-purpose="calculation-summary">
+<p class="text-lg text-black"><span class="font-medium">Horas Calculadas:</span> 2.08 h</p>
+<p class="text-lg text-black"><span class="font-medium">Ganancias Estimadas:</span> $41.60</p>
+</div>
+<!-- END: SummaryBox -->
+<!-- Action Button -->
+<button class="w-full bg-primary hover:bg-primaryDark text-white font-bold text-lg py-4 rounded-full mt-8 shadow-lg active:scale-[0.98] transition-all transform duration-150">
+  Guardar Sesión
+</button>
+</section>
+<!-- END: FormCard -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomNavigation -->
+<nav class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 py-2 pb-6 px-6 z-50">
+<div class="max-w-md mx-auto flex justify-between items-center">
+<!-- Nav Item: Registro (Active) -->
+<a class="flex flex-col items-center gap-1 w-20" href="#">
+<div class="text-primary text-xl">
+<i class="fa-solid fa-file-lines"></i>
+</div>
+<span class="text-[10px] font-medium text-primary">Registro</span>
+</a>
+<!-- Nav Item: Historial -->
+<a class="flex flex-col items-center gap-1 w-20 opacity-40 hover:opacity-100 transition-opacity" href="#">
+<div class="text-gray-500 text-xl">
+<i class="fa-solid fa-clock-rotate-left"></i>
+</div>
+<span class="text-[10px] font-medium text-gray-500">Historial</span>
+</a>
+<!-- Nav Item: Ajustes -->
+<a class="flex flex-col items-center gap-1 w-20 opacity-40 hover:opacity-100 transition-opacity" href="#">
+<div class="text-gray-500 text-xl">
+<i class="fa-solid fa-gear"></i>
+</div>
+<span class="text-[10px] font-medium text-gray-500">Ajustes</span>
+</a>
+</div>
+</nav>
+<!-- END: BottomNavigation -->
+</body></html>

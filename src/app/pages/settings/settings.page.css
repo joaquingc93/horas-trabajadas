@@ -1,0 +1,130 @@
+ion-content {
+  --background: transparent;
+}
+
+.settings-page {
+  min-height: 100vh;
+}
+
+.settings-page ion-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  --color: var(--app-text);
+}
+
+.settings-page ion-title {
+  font-size: clamp(2.1rem, 3.8vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.settings-shell {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 20px 16px 170px;
+  display: grid;
+  gap: 16px;
+}
+
+.settings-card,
+.toggle-card {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border-strong);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: var(--app-glow-soft);
+}
+
+.settings-card h1 {
+  margin: 0 0 14px;
+  color: var(--app-text);
+  font-size: clamp(2.1rem, 3.6vw, 3rem);
+  line-height: 1.1;
+}
+
+.settings-item {
+  --background: var(--app-input-bg);
+  --inner-border-width: 0;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+  border: 1px solid var(--app-border-strong);
+  border-radius: 18px;
+}
+
+.settings-item + .settings-item {
+  margin-top: 12px;
+}
+
+.settings-item ion-label {
+  margin-bottom: 6px;
+  color: var(--app-text);
+  font-size: 1.7rem;
+}
+
+.settings-item ion-input {
+  --placeholder-color: var(--app-muted);
+  color: var(--app-text);
+  font-size: 1.7rem;
+}
+
+.settings-item ion-icon {
+  color: var(--app-accent-soft);
+}
+
+.toggle-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.toggle-card h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--app-text);
+}
+
+.toggle-card p {
+  margin: 6px 0 0;
+  color: var(--app-muted);
+  font-size: 1.35rem;
+}
+
+.toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--app-border);
+  background: var(--app-surface-soft);
+}
+
+.toggle-wrap ion-icon {
+  color: var(--app-accent);
+  font-size: 1.2rem;
+}
+
+.toggle-wrap ion-toggle {
+  --handle-height: 22px;
+  --handle-width: 22px;
+  --track-background: rgba(148, 163, 184, 0.4);
+  --track-background-checked: linear-gradient(130deg, #7c3aed 0%, #a855f7 100%);
+}
+
+.settings-message {
+  display: block;
+  border-radius: 14px;
+  border: 1px solid var(--app-border);
+  background: var(--app-surface-soft);
+  color: var(--app-text);
+  padding: 10px 12px;
+  font-size: 1.45rem;
+}
+
+@media (max-width: 640px) {
+  .toggle-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
