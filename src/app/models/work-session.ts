@@ -1,5 +1,6 @@
 export interface WorkSession {
   id: string;
+  workCenterId: string;
   startIso: string;
   endIso: string;
   durationHours: number;

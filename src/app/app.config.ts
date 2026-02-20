@@ -14,6 +14,7 @@ export const appConfig: ApplicationConfig = {
       mode: 'md',
       rippleEffect: true,
       animated: true,
+      swipeBackEnabled: false
     }),
     provideRouter(routes),
     provideAnimations(),

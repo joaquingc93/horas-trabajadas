@@ -1,0 +1,280 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: #f3f4f6;
+}
+
+ion-content::part(scroll) {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.settings-header ion-toolbar {
+  --background: #f3f4f6;
+  --border-width: 0;
+  --color: #111827;
+  padding-top: 10px;
+  padding-bottom: 6px;
+}
+
+.settings-header ion-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.settings-shell {
+  max-width: 448px;
+  margin: 0 auto;
+  padding: 12px 20px 122px;
+  display: grid;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.settings-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+  position: relative;
+  z-index: 1;
+}
+
+.settings-card h1 {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.section-title {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #5b21b6;
+}
+
+.neon-group {
+  border: 1px solid #d1c4e9;
+  border-radius: 16px;
+  background: #faf7ff;
+  padding: 16px;
+  box-shadow: 0 4px 14px rgba(123, 80, 217, 0.12);
+}
+
+.neon-group + .neon-group {
+  margin-top: 18px;
+}
+
+.settings-field {
+  display: grid;
+  gap: 8px;
+}
+
+.settings-field label {
+  font-size: 13px;
+  color: #374151;
+}
+
+.settings-field input {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid #d1c4e9;
+  background: #ffffff;
+  color: #111827;
+  padding: 0 12px;
+  font-size: 16px;
+  touch-action: manipulation;
+}
+
+.settings-field input::placeholder {
+  color: #9ca3af;
+}
+
+.settings-save-button {
+  margin-top: 14px;
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  height: 42px;
+  background: #673ab7;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.settings-save-button.secondary-save {
+  background: #7c3aed;
+}
+
+.active-center-label {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.active-center-label strong {
+  color: #111827;
+}
+
+.centers-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.center-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid #dcccf8;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.center-item-active {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.2);
+}
+
+.center-name {
+  margin: 0;
+  font-size: 14px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.center-state {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: #6d28d9;
+}
+
+.center-activate {
+  border: 0;
+  border-radius: 9px;
+  height: 34px;
+  min-width: 84px;
+  background: #e9ddfb;
+  color: #5b21b6;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0 10px;
+}
+
+.center-activate-active {
+  background: #ddd6fe;
+  color: #4c1d95;
+}
+
+.center-activate:disabled {
+  opacity: 0.8;
+}
+
+.settings-message {
+  margin: 0;
+  border-radius: 10px;
+  border: 1px solid #d6c9f7;
+  background: #faf7ff;
+  color: #5b21b6;
+  font-size: 13px;
+  padding: 10px 12px;
+}
+
+:host-context(.theme-dark) ion-content {
+  --background: #121212;
+}
+
+:host-context(.theme-dark) .settings-header ion-toolbar {
+  --background: #121212;
+  --color: #ffffff;
+}
+
+:host-context(.theme-dark) .settings-card {
+  background: #1e1e1e;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+:host-context(.theme-dark) .settings-card h1 {
+  color: #ffffff;
+}
+
+:host-context(.theme-dark) .section-title {
+  color: #ddd6fe;
+}
+
+:host-context(.theme-dark) .neon-group {
+  border-color: #a855f7;
+  background: #1a1a1a;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.35);
+}
+
+:host-context(.theme-dark) .settings-field label {
+  color: #d1d5db;
+}
+
+:host-context(.theme-dark) .settings-field input {
+  border-color: #404040;
+  background: #2d2d2d;
+  color: #ffffff;
+}
+
+:host-context(.theme-dark) .active-center-label {
+  color: #d1d5db;
+}
+
+:host-context(.theme-dark) .active-center-label strong {
+  color: #f8fafc;
+}
+
+:host-context(.theme-dark) .settings-save-button {
+  background: #a855f7;
+}
+
+:host-context(.theme-dark) .settings-save-button.secondary-save {
+  background: #9333ea;
+}
+
+:host-context(.theme-dark) .center-item {
+  border-color: rgba(168, 85, 247, 0.34);
+  background: #1f2637;
+}
+
+:host-context(.theme-dark) .center-item-active {
+  border-color: #c084fc;
+  box-shadow: 0 0 0 1px rgba(192, 132, 252, 0.28);
+}
+
+:host-context(.theme-dark) .center-name {
+  color: #f3f4f6;
+}
+
+:host-context(.theme-dark) .center-state {
+  color: #d8b4fe;
+}
+
+:host-context(.theme-dark) .center-activate {
+  background: #3a2f56;
+  color: #ede9fe;
+}
+
+:host-context(.theme-dark) .center-activate-active {
+  background: #4c3a72;
+  color: #f3e8ff;
+}
+
+:host-context(.theme-dark) .settings-message {
+  border-color: rgba(168, 85, 247, 0.4);
+  background: rgba(168, 85, 247, 0.16);
+  color: #f3e8ff;
+}

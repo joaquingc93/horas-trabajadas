@@ -1,0 +1,87 @@
+<ion-header class="settings-header">
+  <ion-toolbar>
+    <ion-title>Ajustes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" [scrollY]="true" class="settings-content">
+  <main class="settings-shell">
+    <section class="settings-card">
+      <h1>Ajustes</h1>
+
+      <div class="neon-group">
+        <h2 class="section-title">Usuario</h2>
+        <div class="settings-field">
+          <label for="settings-user-name">Nombre de Usuario</label>
+          <input
+            id="settings-user-name"
+            [value]="userNameInput()"
+            placeholder="usuario_ejemplo"
+            (input)="onUserNameInput($event)"
+          />
+        </div>
+
+        <button
+          type="button"
+          class="settings-save-button"
+          [disabled]="savingUser()"
+          (click)="saveUserName()"
+        >
+          {{ savingUser() ? 'Guardando...' : 'Guardar usuario' }}
+        </button>
+      </div>
+
+      <div class="neon-group">
+        <h2 class="section-title">Centros de trabajo</h2>
+
+        <p class="active-center-label">Centro activo: <strong>{{ activeWorkCenterName() }}</strong></p>
+
+        <div class="settings-field">
+          <label for="settings-work-center">Agregar centro de trabajo</label>
+          <input
+            id="settings-work-center"
+            [value]="workCenterNameInput()"
+            placeholder="Ej: Oficina Norte"
+            (input)="onWorkCenterNameInput($event)"
+          />
+        </div>
+
+        <button
+          type="button"
+          class="settings-save-button secondary-save"
+          [disabled]="addingCenter()"
+          (click)="addWorkCenter()"
+        >
+          {{ addingCenter() ? 'Agregando...' : 'Agregar centro' }}
+        </button>
+
+        <ul class="centers-list" aria-label="Lista de centros de trabajo">
+          @for (center of workCenters(); track center.id) {
+          <li class="center-item" [class.center-item-active]="isCenterActive(center.id)">
+            <div>
+              <p class="center-name">{{ center.name }}</p>
+              @if (isCenterActive(center.id)) {
+              <span class="center-state">Activo</span>
+              }
+            </div>
+
+            <button
+              type="button"
+              class="center-activate"
+              [class.center-activate-active]="isCenterActive(center.id)"
+              [disabled]="isCenterActive(center.id) || activatingCenterId() === center.id"
+              (click)="setActiveWorkCenter(center.id)"
+            >
+              {{ activatingCenterId() === center.id ? 'Activando...' : isCenterActive(center.id) ? 'Activo' : 'Activar' }}
+            </button>
+          </li>
+          }
+        </ul>
+      </div>
+    </section>
+
+    @if (message()) {
+    <p class="settings-message" aria-live="polite">{{ message() }}</p>
+    }
+  </main>
+</ion-content>

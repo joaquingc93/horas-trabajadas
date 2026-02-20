@@ -1,6 +1,21 @@
 <ion-app>
+  @if (showThemeToggle()) {
+  <button
+    type="button"
+    class="global-theme-toggle"
+    [class.is-dark]="darkMode()"
+    [attr.aria-label]="darkMode() ? 'Desactivar modo oscuro' : 'Activar modo oscuro'"
+    [attr.aria-pressed]="darkMode()"
+    (click)="toggleDarkMode()"
+  >
+    <ion-icon class="toggle-icon toggle-icon-moon" name="moon-outline" aria-hidden="true"></ion-icon>
+    <span class="toggle-thumb" aria-hidden="true"></span>
+    <ion-icon class="toggle-icon toggle-icon-sun" name="sunny-outline" aria-hidden="true"></ion-icon>
+  </button>
+  }
+
   <ion-tabs>
-    <ion-router-outlet></ion-router-outlet>
+    <ion-router-outlet [swipeGesture]="false"></ion-router-outlet>
 
     <ion-tab-bar slot="bottom" class="tab-bar">
       <ion-tab-button

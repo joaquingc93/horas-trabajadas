@@ -16,7 +16,12 @@ export const routes: Routes = [
   },
   {
     path: 'settings',
-    loadComponent: () => import('./pages/settings/settings.page').then((m) => m.SettingsPage)
+    loadComponent: () => import('./pages/usuario/usuario.page').then((m) => m.UsuarioPage)
+  },
+  {
+    path: 'usuario',
+    redirectTo: 'settings',
+    pathMatch: 'full'
   },
   {
     path: '**',

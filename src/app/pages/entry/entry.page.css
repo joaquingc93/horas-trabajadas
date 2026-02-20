@@ -26,6 +26,8 @@ ion-content {
   max-width: 448px;
   margin: 0 auto;
   padding: 8px 16px 126px;
+  position: relative;
+  z-index: 1;
 }
 
 .entry-card {
@@ -33,6 +35,8 @@ ion-content {
   border-radius: 32px;
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
   padding: 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .entry-card-header {
@@ -43,12 +47,33 @@ ion-content {
   margin-bottom: 14px;
 }
 
+.entry-title-block {
+  max-width: 72%;
+}
+
 .entry-card-header h1 {
   margin: 0;
   font-size: 32px;
   line-height: 1.1;
   font-weight: 700;
   color: #111827;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.active-work-center {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-card-header h1.user-title {
+  color: #673ab7;
 }
 
 .new-session {
@@ -96,6 +121,29 @@ ion-content {
   gap: 8px;
 }
 
+.field-picker {
+  appearance: none;
+  width: 100%;
+  border: 1px solid #d1c4e9;
+  background: #ffffff;
+  font: inherit;
+  justify-content: space-between;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.field-picker .field-picker-label {
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.field-picker ion-icon {
+  color: #7b50d9;
+  font-size: 18px;
+  pointer-events: none;
+}
+
 .field-item input {
   width: 100%;
   border: 0;
@@ -103,11 +151,6 @@ ion-content {
   color: #6b7280;
   font-size: 16px;
   outline: none;
-}
-
-.field-item ion-icon {
-  color: #9f7aea;
-  font-size: 20px;
 }
 
 .field-item.field-error {
@@ -207,6 +250,14 @@ ion-content {
   color: #f8fafc;
 }
 
+:host-context(.theme-dark) .active-work-center {
+  color: #cbd5e1;
+}
+
+:host-context(.theme-dark) .entry-card-header h1.user-title {
+  color: #c084fc;
+}
+
 :host-context(.theme-dark) .field-item {
   border-color: #5b4b7b;
   background: #1f2331;
@@ -214,6 +265,14 @@ ion-content {
 
 :host-context(.theme-dark) .field-item input {
   color: #d6d7dd;
+}
+
+:host-context(.theme-dark) .field-picker .field-picker-label {
+  color: #d6d7dd;
+}
+
+:host-context(.theme-dark) .field-picker ion-icon {
+  color: #a78bfa;
 }
 
 :host-context(.theme-dark) .summary-box {

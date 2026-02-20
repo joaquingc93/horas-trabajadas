@@ -1,9 +1,13 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 ion-content {
   --background: #f2f2f7;
+  flex: 1;
+  min-height: 0;
 }
 
 .history-header {
@@ -30,9 +34,40 @@ ion-content {
 .history-shell {
   max-width: 448px;
   margin: 0 auto;
-  padding: 8px 16px 126px;
+  box-sizing: border-box;
+  padding: 8px 16px calc(96px + env(safe-area-inset-bottom, 0px));
+}
+
+.history-fixed-zone {
+  max-width: 448px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 16px 0;
   display: grid;
   gap: 12px;
+}
+
+.active-center-card {
+  border-radius: 12px;
+  border: 1px solid rgba(123, 80, 217, 0.2);
+  background: #faf7ff;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.active-center-card p {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.active-center-card strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 15px;
+  color: #4c1d95;
+  text-align: center;
 }
 
 .filters-grid,
@@ -58,23 +93,43 @@ ion-content {
 }
 
 .filter-input-wrap {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.filter-input-wrap input {
+.filter-picker-button {
   width: 100%;
   border: 0;
   background: transparent;
   color: #374151;
   font-size: 14px;
+  font-weight: 500;
   outline: none;
+  padding: 0 26px 0 0;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
-.filter-input-wrap ion-icon {
+.filter-picker-button:focus-visible {
+  outline: 2px solid #7b50d9;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.filter-picker-value {
+  display: inline-block;
+  width: 100%;
+}
+
+.filter-calendar-icon {
+  position: absolute;
+  right: 0;
   color: #7b50d9;
-  font-size: 20px;
+  font-size: 18px;
+  pointer-events: none;
 }
 
 .summary-card {
@@ -259,76 +314,12 @@ ion-content {
   color: #6b7280;
 }
 
-ion-modal ion-content {
-  --background: #f7f7fb;
-}
-
-.edit-header ion-toolbar {
-  --background: #f7f7fb;
-  --border-width: 0;
-  --color: #111827;
-}
-
-.edit-form {
-  display: grid;
-  gap: 12px;
-  padding: 16px;
-}
-
-.edit-field {
-  display: grid;
-  gap: 6px;
-}
-
-.edit-field label {
-  font-size: 13px;
-  color: #4b5563;
-  font-weight: 600;
-}
-
-.edit-field input {
-  width: 100%;
-  height: 44px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-  color: #111827;
-  padding: 0 12px;
-  font-size: 14px;
-}
-
-.edit-actions {
-  margin-top: 6px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.edit-actions button {
-  border: 0;
-  border-radius: 10px;
-  height: 38px;
-  padding: 0 14px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.edit-cancel {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-.edit-save {
-  background: #7b50d9;
-  color: #ffffff;
-}
-
-.edit-save:disabled {
-  opacity: 0.6;
-}
-
 :host-context(.theme-dark) ion-content {
   --background: #0e111a;
+}
+
+:host-context(.theme-dark) .history-fixed-zone {
+  background: transparent;
 }
 
 :host-context(.theme-dark) .history-header ion-toolbar {
@@ -339,23 +330,30 @@ ion-modal ion-content {
 :host-context(.theme-dark) .summary-card,
 :host-context(.theme-dark) .session-item,
 :host-context(.theme-dark) .empty-state,
-:host-context(.theme-dark) .filter-field {
+:host-context(.theme-dark) .filter-field,
+:host-context(.theme-dark) .active-center-card {
   background: #161b27;
   border-color: rgba(148, 163, 184, 0.22);
 }
 
 :host-context(.theme-dark) .summary-card p,
 :host-context(.theme-dark) .summary-card strong,
+:host-context(.theme-dark) .active-center-card p,
+:host-context(.theme-dark) .active-center-card strong,
 :host-context(.theme-dark) .session-date-col strong,
 :host-context(.theme-dark) .session-main-col p,
 :host-context(.theme-dark) .session-side-col strong,
 :host-context(.theme-dark) .filter-field label,
-:host-context(.theme-dark) .filter-input-wrap input,
+:host-context(.theme-dark) .filter-picker-button,
 :host-context(.theme-dark) .session-main-col span,
 :host-context(.theme-dark) .session-date-col span,
 :host-context(.theme-dark) .session-side-col span,
 :host-context(.theme-dark) .empty-state p {
   color: #d8dbe4;
+}
+
+:host-context(.theme-dark) .filter-calendar-icon {
+  color: #a78bfa;
 }
 
 :host-context(.theme-dark) .session-date-col {

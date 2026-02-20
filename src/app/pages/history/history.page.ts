@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -13,6 +13,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import {
   IonContent,
+  IonDatetime,
   IonHeader,
   IonIcon,
   IonModal,
@@ -33,7 +34,9 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 
+import { normalizeFilterDateTimeValue, parseFilterDateTime } from './history-filter-datetime.util';
 import { WorkSession } from '../../models/work-session';
+import { PreferencesService } from '../../services/preferences.service';
 import { SessionsStoreService } from '../../services/sessions-store.service';
 
 type EditFormGroup = FormGroup<{
@@ -48,6 +51,7 @@ type EditFormGroup = FormGroup<{
     CommonModule,
     ReactiveFormsModule,
     IonContent,
+    IonDatetime,
     IonHeader,
     IonIcon,
     IonModal,
@@ -60,14 +64,24 @@ type EditFormGroup = FormGroup<{
 })
 export class HistoryPage {
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly preferences = inject(PreferencesService);
   private readonly sessionsStore = inject(SessionsStoreService);
+  private actionMessageTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   protected readonly filterFrom = signal('');
   protected readonly filterTo = signal('');
+  protected readonly filterFromModalOpen = signal(false);
+  protected readonly filterToModalOpen = signal(false);
+  protected readonly filterFromDraft = signal<string | null>(null);
+  protected readonly filterToDraft = signal<string | null>(null);
   protected readonly deletingId = signal<string | null>(null);
   protected readonly actionMessage = signal<string | null>(null);
   protected readonly exportingPdf = signal(false);
   protected readonly exportingExcel = signal(false);
+  protected readonly deleteModalOpen = signal(false);
+  protected readonly pendingDeleteSession = signal<WorkSession | null>(null);
+  protected readonly deleteAcknowledged = signal(false);
   protected readonly editModalOpen = signal(false);
   protected readonly editingSessionId = signal<string | null>(null);
   protected readonly savingEdit = signal(false);
@@ -81,8 +95,15 @@ export class HistoryPage {
   });
 
   protected readonly sessions = computed(() => this.sessionsStore.sessions());
+  protected readonly activeWorkCenterId = computed(() => this.preferences.activeWorkCenterId());
+  protected readonly activeWorkCenterName = computed(
+    () => this.preferences.activeWorkCenter()?.name ?? 'Sin centro activo'
+  );
+  protected readonly sessionsByActiveCenter = computed(() =>
+    this.sessions().filter((session) => session.workCenterId === this.activeWorkCenterId())
+  );
   protected readonly filteredSessions = computed(() =>
-    this.filterSessionsByRange(this.sessions(), this.filterFrom(), this.filterTo())
+    this.filterSessionsByRange(this.sessionsByActiveCenter(), this.filterFrom(), this.filterTo())
   );
   protected readonly hasSessions = computed(() => this.filteredSessions().length > 0);
   protected readonly totalHours = computed(() =>
@@ -91,6 +112,14 @@ export class HistoryPage {
   protected readonly totalIncome = computed(() =>
     this.round2(this.filteredSessions().reduce((sum, session) => sum + session.totalIncome, 0))
   );
+  protected readonly deletingPendingSession = computed(() => {
+    const pendingSession = this.pendingDeleteSession();
+    return pendingSession ? this.deletingId() === pendingSession.id : false;
+  });
+  protected readonly canConfirmDelete = computed(() => {
+    const hasPendingSession = !!this.pendingDeleteSession();
+    return hasPendingSession && this.deleteAcknowledged() && !this.deletingPendingSession();
+  });
 
   private readonly dateLabelFormatter = new Intl.DateTimeFormat('es', {
     day: '2-digit',
@@ -113,24 +142,90 @@ export class HistoryPage {
       'trash-outline': trashOutline
     });
 
-    void this.sessionsStore.ensureLoaded();
+    void Promise.all([this.sessionsStore.ensureLoaded(), this.preferences.ensureLoaded()]);
+
+    this.destroyRef.onDestroy(() => {
+      this.clearActionMessageTimer();
+    });
   }
 
-  protected onFilterDateChange(type: 'from' | 'to', value: string | number | null | undefined): void {
-    const normalized = typeof value === 'string' ? value : '';
-    if (type === 'from') {
-      this.filterFrom.set(normalized);
+  protected openFilterModal(field: 'from' | 'to'): void {
+    const currentValue = normalizeFilterDateTimeValue(field === 'from' ? this.filterFrom() : this.filterTo());
+
+    if (field === 'from') {
+      this.filterFromDraft.set(currentValue);
+      this.filterFromModalOpen.set(true);
       return;
     }
-    this.filterTo.set(normalized);
+
+    this.filterToDraft.set(currentValue);
+    this.filterToModalOpen.set(true);
   }
 
-  protected onFilterInput(type: 'from' | 'to', event: Event): void {
-    const target = event.target;
-    if (!(target instanceof HTMLInputElement)) {
+  protected closeFilterModal(field: 'from' | 'to'): void {
+    if (field === 'from') {
+      this.filterFromModalOpen.set(false);
       return;
     }
-    this.onFilterDateChange(type, target.value);
+
+    this.filterToModalOpen.set(false);
+  }
+
+  protected onFilterDateSelection(
+    field: 'from' | 'to',
+    value: string | string[] | null | undefined
+  ): void {
+    const selectedValue = normalizeFilterDateTimeValue(value);
+
+    if (field === 'from') {
+      this.filterFromDraft.set(selectedValue);
+      return;
+    }
+
+    this.filterToDraft.set(selectedValue);
+  }
+
+  protected applyFilterDate(field: 'from' | 'to'): void {
+    if (field === 'from') {
+      this.filterFrom.set(normalizeFilterDateTimeValue(this.filterFromDraft()) ?? '');
+      this.closeFilterModal('from');
+      return;
+    }
+
+    this.filterTo.set(normalizeFilterDateTimeValue(this.filterToDraft()) ?? '');
+    this.closeFilterModal('to');
+  }
+
+  protected clearFilterDate(field: 'from' | 'to'): void {
+    if (field === 'from') {
+      this.filterFrom.set('');
+      this.filterFromDraft.set(null);
+      this.closeFilterModal('from');
+      return;
+    }
+
+    this.filterTo.set('');
+    this.filterToDraft.set(null);
+    this.closeFilterModal('to');
+  }
+
+  protected filterButtonLabel(field: 'from' | 'to'): string {
+    const value = field === 'from' ? this.filterFrom() : this.filterTo();
+    const timestamp = this.parseDateTime(value);
+    if (timestamp === null) {
+      return 'Sin límite';
+    }
+
+    const date = new Date(timestamp);
+
+    return new Intl.DateTimeFormat('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h12'
+    }).format(date);
   }
 
   protected formatDateLabel(iso: string): string {
@@ -159,12 +254,58 @@ export class HistoryPage {
     return session.id;
   }
 
-  protected async deleteSession(id: string): Promise<void> {
-    this.deletingId.set(id);
-    this.actionMessage.set(null);
+  protected openDeleteModal(session: WorkSession): void {
+    if (this.deletingId()) {
+      return;
+    }
+
+    this.pendingDeleteSession.set(session);
+    this.deleteAcknowledged.set(false);
+    this.deleteModalOpen.set(true);
+  }
+
+  protected onDeleteAcknowledgedChange(event: Event): void {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) {
+      return;
+    }
+
+    this.deleteAcknowledged.set(target.checked);
+  }
+
+  protected closeDeleteModal(): void {
+    if (this.deletingId()) {
+      return;
+    }
+
+    this.resetDeleteDialog();
+  }
+
+  protected pendingDeleteLabel(): string {
+    const session = this.pendingDeleteSession();
+    if (!session) {
+      return '';
+    }
+
+    return `${this.formatDateLabel(session.startIso)} · ${this.formatTimeRange(session)}`;
+  }
+
+  protected async confirmDeleteSession(): Promise<void> {
+    const session = this.pendingDeleteSession();
+    if (!session) {
+      return;
+    }
+
+    this.deletingId.set(session.id);
+    this.setActionMessage(null);
+
     try {
-      await this.sessionsStore.remove(id);
-      this.actionMessage.set('Sesion eliminada.');
+      await this.sessionsStore.remove(session.id);
+      this.setActionMessage('Sesión eliminada.', 3200);
+      this.resetDeleteDialog();
+    } catch (error) {
+      const fallback = error instanceof Error ? error.message : 'No se pudo eliminar la sesión.';
+      this.setActionMessage(fallback);
     } finally {
       this.deletingId.set(null);
     }
@@ -205,20 +346,27 @@ export class HistoryPage {
     const hourlyRate = Number(formValue.hourlyRate);
 
     if (!startIso || !endIso || !Number.isFinite(hourlyRate) || hourlyRate < 0) {
-      this.actionMessage.set('No se pudo guardar. Revisa los datos de la sesion.');
+      this.setActionMessage('No se pudo guardar. Revisa los datos de la sesión.');
+      return;
+    }
+
+    const startTime = new Date(startIso).getTime();
+    const endTime = new Date(endIso).getTime();
+    if (!Number.isFinite(startTime) || !Number.isFinite(endTime) || endTime <= startTime) {
+      this.setActionMessage('La fecha y hora de salida debe ser posterior a la de entrada.');
       return;
     }
 
     this.savingEdit.set(true);
-    this.actionMessage.set(null);
+    this.setActionMessage(null);
 
     try {
       await this.sessionsStore.update(id, startIso, endIso, hourlyRate);
-      this.actionMessage.set('Sesion actualizada correctamente.');
+      this.setActionMessage('Sesión actualizada correctamente.', 3200);
       this.closeEditModal();
     } catch (error) {
-      const fallback = error instanceof Error ? error.message : 'No se pudo actualizar la sesion.';
-      this.actionMessage.set(fallback);
+      const fallback = error instanceof Error ? error.message : 'No se pudo actualizar la sesión.';
+      this.setActionMessage(fallback);
     } finally {
       this.savingEdit.set(false);
     }
@@ -231,12 +379,12 @@ export class HistoryPage {
     }
 
     this.exportingPdf.set(true);
-    this.actionMessage.set(null);
+    this.setActionMessage(null);
 
     try {
       const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
-      const fromLabel = this.filterFrom() || 'Inicio';
-      const toLabel = this.filterTo() || 'Actual';
+      const fromLabel = this.filterButtonLabel('from');
+      const toLabel = this.filterButtonLabel('to');
 
       doc.setFillColor(20, 96, 125);
       doc.rect(32, 34, 531, 18, 'F');
@@ -289,10 +437,10 @@ export class HistoryPage {
 
       const filename = this.buildExportFilename('pdf');
       await this.savePdf(doc, filename);
-      this.actionMessage.set('PDF exportado correctamente.');
+      this.setActionMessage('PDF exportado correctamente.', 3200);
     } catch (error) {
       console.error('No se pudo exportar el PDF', error);
-      this.actionMessage.set('No se pudo exportar el PDF.');
+      this.setActionMessage('No se pudo exportar el PDF.');
     } finally {
       this.exportingPdf.set(false);
     }
@@ -305,7 +453,7 @@ export class HistoryPage {
     }
 
     this.exportingExcel.set(true);
-    this.actionMessage.set(null);
+    this.setActionMessage(null);
 
     try {
       const workbook = XLSX.utils.book_new();
@@ -332,18 +480,18 @@ export class HistoryPage {
 
       const filename = this.buildExportFilename('xlsx');
       await this.saveExcel(workbook, filename);
-      this.actionMessage.set('Excel exportado correctamente.');
+      this.setActionMessage('Excel exportado correctamente.', 3200);
     } catch (error) {
       console.error('No se pudo exportar el Excel', error);
-      this.actionMessage.set('No se pudo exportar el Excel.');
+      this.setActionMessage('No se pudo exportar el Excel.');
     } finally {
       this.exportingExcel.set(false);
     }
   }
 
   private filterSessionsByRange(sessions: WorkSession[], fromValue: string, toValue: string): WorkSession[] {
-    const fromTime = this.startOfDay(fromValue);
-    const toTime = this.endOfDay(toValue);
+    const fromTime = this.parseDateTime(fromValue);
+    const toTime = this.parseDateTime(toValue);
 
     return sessions.filter((session) => {
       const start = new Date(session.startIso).getTime();
@@ -359,37 +507,26 @@ export class HistoryPage {
     });
   }
 
-  private startOfDay(value: string): number | null {
-    if (!value) {
-      return null;
-    }
-
-    const date = new Date(value);
-    if (!Number.isFinite(date.getTime())) {
-      return null;
-    }
-
-    date.setHours(0, 0, 0, 0);
-    return date.getTime();
-  }
-
-  private endOfDay(value: string): number | null {
-    if (!value) {
-      return null;
-    }
-
-    const date = new Date(value);
-    if (!Number.isFinite(date.getTime())) {
-      return null;
-    }
-
-    date.setHours(23, 59, 59, 999);
-    return date.getTime();
+  private parseDateTime(value: string): number | null {
+    return parseFilterDateTime(value);
   }
 
   private buildExportFilename(extension: 'pdf' | 'xlsx'): string {
     const today = new Date().toISOString().slice(0, 10);
-    return `reporte-jornadas-${today}.${extension}`;
+    const userNameSegment = this.toFileNameSegment(this.preferences.userName());
+    const workCenterSegment = this.toFileNameSegment(this.activeWorkCenterName());
+    return `reporte-jornadas-${userNameSegment}-${workCenterSegment}-${today}.${extension}`;
+  }
+
+  private toFileNameSegment(value: string): string {
+    const normalized = value
+      .trim()
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+    return normalized || 'usuario';
   }
 
   private async savePdf(doc: jsPDF, filename: string): Promise<void> {
@@ -498,6 +635,35 @@ export class HistoryPage {
 
   private round2(value: number): number {
     return Math.round(value * 100) / 100;
+  }
+
+  private setActionMessage(message: string | null, autoClearMs = 0): void {
+    this.clearActionMessageTimer();
+    this.actionMessage.set(message);
+
+    if (!message || autoClearMs <= 0) {
+      return;
+    }
+
+    this.actionMessageTimeoutId = setTimeout(() => {
+      this.actionMessage.set(null);
+      this.actionMessageTimeoutId = null;
+    }, autoClearMs);
+  }
+
+  private clearActionMessageTimer(): void {
+    if (this.actionMessageTimeoutId === null) {
+      return;
+    }
+
+    clearTimeout(this.actionMessageTimeoutId);
+    this.actionMessageTimeoutId = null;
+  }
+
+  private resetDeleteDialog(): void {
+    this.deleteModalOpen.set(false);
+    this.pendingDeleteSession.set(null);
+    this.deleteAcknowledged.set(false);
   }
 
   private capitalize(value: string): string {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import {
@@ -11,7 +11,13 @@ import {
   IonTabs
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { documentTextOutline, settingsOutline, timeOutline } from 'ionicons/icons';
+import {
+  documentTextOutline,
+  moonOutline,
+  settingsOutline,
+  sunnyOutline,
+  timeOutline
+} from 'ionicons/icons';
 
 import { PreferencesService } from './services/preferences.service';
 
@@ -35,13 +41,23 @@ import { PreferencesService } from './services/preferences.service';
 export class App {
   private readonly preferences = inject(PreferencesService);
 
+  protected readonly darkMode = computed(() => this.preferences.darkMode());
+  protected readonly showThemeToggle = signal(true);
+
   constructor() {
     addIcons({
       'document-text-outline': documentTextOutline,
       'time-outline': timeOutline,
-      'settings-outline': settingsOutline
+      'settings-outline': settingsOutline,
+      'moon-outline': moonOutline,
+      'sunny-outline': sunnyOutline
     });
 
     void this.preferences.ensureLoaded();
   }
+
+  protected async toggleDarkMode(): Promise<void> {
+    await this.preferences.setDarkMode(!this.darkMode());
+  }
+
 }

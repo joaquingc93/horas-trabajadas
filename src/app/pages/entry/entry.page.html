@@ -8,34 +8,49 @@
   <main class="entry-shell">
     <section class="entry-card" aria-label="Formulario de registro de jornada">
       <div class="entry-card-header">
-        <h1>Nueva Sesion</h1>
+        <div class="entry-title-block">
+          <h1 [class.user-title]="hasUserName()">{{ greetingTitle() }}</h1>
+          <p class="active-work-center">Centro activo: {{ activeWorkCenterName() }}</p>
+        </div>
         <button type="button" class="new-session" (click)="startNewSession()">
           <ion-icon name="add-circle-outline" aria-hidden="true"></ion-icon>
-          <span>Nueva Sesion</span>
+          <span>Nueva sesión</span>
         </button>
       </div>
 
       <form [formGroup]="form" class="entry-form">
         <div class="field-group">
-          <label for="start-input">Fecha y Hora de Inicio</label>
-          <div class="field-item" [class.field-error]="isControlInvalid('start')">
-            <input id="start-input" type="datetime-local" formControlName="start" />
+          <label for="start-picker-button">Fecha y Hora de Inicio</label>
+          <button
+            id="start-picker-button"
+            type="button"
+            class="field-item field-picker"
+            [class.field-error]="isControlInvalid('start')"
+            (click)="openDateModal('start')"
+          >
+            <span class="field-picker-label">{{ dateButtonLabel('start') }}</span>
             <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
-          </div>
+          </button>
         </div>
         @if (isControlInvalid('start')) {
-        <p class="error-note">Ingresa una fecha y hora de inicio valida.</p>
+        <p class="error-note">Ingresa una fecha y hora de inicio válida.</p>
         }
 
         <div class="field-group">
-          <label for="end-input">Fecha y Hora de Fin</label>
-          <div class="field-item" [class.field-error]="isControlInvalid('end')">
-            <input id="end-input" type="datetime-local" formControlName="end" />
+          <label for="end-picker-button">Fecha y Hora de Fin</label>
+          <button
+            id="end-picker-button"
+            type="button"
+            class="field-item field-picker"
+            [class.field-error]="isControlInvalid('end')"
+            (click)="openDateModal('end')"
+          >
+            <span class="field-picker-label">{{ dateButtonLabel('end') }}</span>
             <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
-          </div>
+          </button>
         </div>
         @if (isControlInvalid('end')) {
-        <p class="error-note">Ingresa una fecha y hora de fin valida.</p>
+        <p class="error-note">Ingresa una fecha y hora de salida válida.</p>
         }
 
         <div class="field-group">
@@ -55,7 +70,7 @@
         }
 
         @if (form.errors?.['range']) {
-        <p class="error-note">La hora de fin debe ser mayor o igual a la hora de inicio.</p>
+        <p class="error-note">La fecha y hora de salida debe ser posterior a la de entrada.</p>
         }
 
         <article class="summary-box" role="status" aria-live="polite">
@@ -65,7 +80,7 @@
 
         @if (lastSessionHours() !== null && lastSessionIncome() !== null) {
         <article class="last-saved" aria-live="polite">
-          <p>Ultima sesion guardada</p>
+          <p>Última sesión guardada</p>
           <span>{{ formatHours(lastSessionHours()) }} - {{ formatCurrency(lastSessionIncome()) }}</span>
         </article>
         }
@@ -75,12 +90,80 @@
         }
 
         <button type="button" class="save-button" [disabled]="saving()" (click)="saveSession()">
-          {{ saving() ? 'Guardando...' : 'Guardar Sesion' }}
+          {{ saving() ? 'Guardando...' : 'Guardar sesión' }}
         </button>
       </form>
     </section>
   </main>
 </ion-content>
+
+<ion-modal
+  cssClass="entry-datetime-modal"
+  [isOpen]="startModalOpen()"
+  [keepContentsMounted]="true"
+  (didDismiss)="closeDateModal('start')"
+>
+  <ng-template>
+    <ion-header class="picker-header">
+      <ion-toolbar>
+        <ion-title>Inicio de jornada</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-datetime
+        id="start-datetime"
+        presentation="date-time"
+        locale="es-ES"
+        hourCycle="h12"
+        [showDefaultTimeLabel]="false"
+        [value]="draftStartIso()"
+        (ionChange)="onDateSelection('start', $event.detail.value)"
+      >
+        <span slot="time-label" class="picker-time-slot">Hora entrada</span>
+      </ion-datetime>
+
+      <div class="picker-actions">
+        <button type="button" class="picker-cancel" (click)="closeDateModal('start')">Cancelar</button>
+        <button type="button" class="picker-apply" (click)="applyDateSelection('start')">Aplicar</button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-modal
+  cssClass="entry-datetime-modal"
+  [isOpen]="endModalOpen()"
+  [keepContentsMounted]="true"
+  (didDismiss)="closeDateModal('end')"
+>
+  <ng-template>
+    <ion-header class="picker-header">
+      <ion-toolbar>
+        <ion-title>Fin de jornada</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-datetime
+        id="end-datetime"
+        presentation="date-time"
+        locale="es-ES"
+        hourCycle="h12"
+        [showDefaultTimeLabel]="false"
+        [value]="draftEndIso()"
+        (ionChange)="onDateSelection('end', $event.detail.value)"
+      >
+        <span slot="time-label" class="picker-time-slot">Hora salida</span>
+      </ion-datetime>
+
+      <div class="picker-actions">
+        <button type="button" class="picker-cancel" (click)="closeDateModal('end')">Cancelar</button>
+        <button type="button" class="picker-apply" (click)="applyDateSelection('end')">Aplicar</button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
 
 <ion-toast
   [isOpen]="toastOpen()"

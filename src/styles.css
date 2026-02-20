@@ -87,3 +87,570 @@ ion-item {
 ion-modal {
   --border-radius: 24px;
 }
+
+ion-modal.entry-datetime-modal {
+  --width: min(520px, calc(100vw - 24px));
+}
+
+ion-modal.entry-datetime-modal ion-content {
+  --background: var(--app-modal-bg);
+  --color: var(--app-text);
+}
+
+ion-modal.entry-datetime-modal .picker-header ion-toolbar {
+  --background: var(--app-modal-bg);
+  --border-width: 0 0 1px;
+  --border-color: rgba(139, 92, 246, 0.18);
+  --color: var(--app-text);
+  --min-height: 56px;
+  padding-inline: 6px;
+}
+
+ion-modal.entry-datetime-modal .picker-header ion-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+ion-modal.entry-datetime-modal ion-datetime {
+  --background: var(--app-modal-bg);
+  --calendar-day-color: var(--app-text);
+  --calendar-day-color-disabled: #9ca3af;
+  --calendar-day-color-today: var(--app-accent);
+  --calendar-day-background-today: rgba(124, 58, 237, 0.2);
+  --calendar-day-color-active: #ffffff;
+  --calendar-day-background-active: var(--app-accent);
+  --wheel-highlight-background: rgba(124, 58, 237, 0.2);
+  --wheel-fade-background-rgb: 242, 243, 251;
+  margin: 10px 12px 0;
+  border: 1px solid rgba(139, 92, 246, 0.32);
+  border-radius: 18px;
+  box-shadow: var(--app-shadow-soft);
+  color: var(--app-text);
+}
+
+ion-modal.entry-datetime-modal .picker-time-slot {
+  color: #5b21b6;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+ion-modal.entry-datetime-modal .picker-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  border-top: 1px solid rgba(139, 92, 246, 0.2);
+  background: var(--app-modal-bg);
+}
+
+ion-modal.entry-datetime-modal .picker-actions button {
+  border: 0;
+  border-radius: 12px;
+  height: 40px;
+  min-width: 110px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+ion-modal.entry-datetime-modal .picker-cancel {
+  background: #ebe5fa;
+  color: #5b21b6;
+}
+
+ion-modal.entry-datetime-modal .picker-apply {
+  background: var(--app-accent);
+  color: #ffffff;
+  box-shadow: 0 8px 16px rgba(124, 58, 237, 0.35);
+}
+
+body.theme-dark ion-modal.entry-datetime-modal ion-datetime,
+html.theme-dark ion-modal.entry-datetime-modal ion-datetime {
+  --calendar-day-color-active: #0b1020;
+  --calendar-day-color-disabled: #6b7280;
+  --calendar-day-background-today: rgba(192, 132, 252, 0.24);
+  --wheel-highlight-background: rgba(192, 132, 252, 0.2);
+  --wheel-fade-background-rgb: 15, 17, 25;
+  border-color: rgba(192, 132, 252, 0.34);
+}
+
+body.theme-dark ion-modal.entry-datetime-modal .picker-cancel,
+html.theme-dark ion-modal.entry-datetime-modal .picker-cancel {
+  background: #2a3347;
+  color: #ddd6fe;
+}
+
+body.theme-dark ion-modal.entry-datetime-modal .picker-apply,
+html.theme-dark ion-modal.entry-datetime-modal .picker-apply {
+  color: #0b1020;
+}
+
+ion-modal.history-edit-modal {
+  --width: min(540px, calc(100vw - 24px));
+}
+
+ion-modal.history-edit-modal ion-content {
+  --background: var(--app-modal-bg);
+  --color: var(--app-text);
+}
+
+ion-modal.history-edit-modal .edit-header ion-toolbar {
+  --background: var(--app-modal-bg);
+  --border-width: 0 0 1px;
+  --border-color: rgba(139, 92, 246, 0.16);
+  --color: var(--app-text);
+  --min-height: 56px;
+  padding-inline: 6px;
+}
+
+ion-modal.history-edit-modal .edit-header ion-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--app-text);
+}
+
+ion-modal.history-edit-modal .edit-form {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: var(--app-modal-bg);
+}
+
+ion-modal.history-edit-modal .edit-field {
+  display: grid;
+  gap: 6px;
+}
+
+ion-modal.history-edit-modal .edit-field label {
+  font-size: 13px;
+  color: var(--app-muted);
+  font-weight: 600;
+}
+
+ion-modal.history-edit-modal .edit-field input {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--app-border);
+  background: var(--app-input-bg);
+  color: var(--app-text);
+  padding: 0 12px;
+  font-size: 14px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+ion-modal.history-edit-modal .edit-field input:focus-visible {
+  outline: none;
+  border-color: var(--app-border-strong);
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+}
+
+ion-modal.history-edit-modal .edit-field input[type='datetime-local'] {
+  color-scheme: light;
+}
+
+ion-modal.history-edit-modal .edit-actions {
+  margin-top: 6px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(139, 92, 246, 0.18);
+}
+
+ion-modal.history-edit-modal .edit-actions button {
+  border: 0;
+  border-radius: 10px;
+  height: 38px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+ion-modal.history-edit-modal .edit-cancel {
+  background: color-mix(in srgb, var(--app-accent) 14%, #ffffff);
+  color: color-mix(in srgb, var(--app-accent) 70%, #2f185c);
+}
+
+ion-modal.history-edit-modal .edit-save {
+  background: var(--app-accent);
+  color: #ffffff;
+  box-shadow: 0 8px 16px rgba(124, 58, 237, 0.32);
+}
+
+ion-modal.history-edit-modal .edit-save:disabled {
+  opacity: 0.6;
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-header ion-toolbar,
+html.theme-dark ion-modal.history-edit-modal .edit-header ion-toolbar {
+  --background: linear-gradient(180deg, #171a27 0%, #121522 100%);
+  --border-color: rgba(192, 132, 252, 0.26);
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-header ion-title,
+html.theme-dark ion-modal.history-edit-modal .edit-header ion-title {
+  color: #f8fafc;
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-form,
+html.theme-dark ion-modal.history-edit-modal .edit-form {
+  background: linear-gradient(180deg, #121522 0%, #0f111a 100%);
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-field label,
+html.theme-dark ion-modal.history-edit-modal .edit-field label {
+  color: #cbd5e1;
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-field input,
+html.theme-dark ion-modal.history-edit-modal .edit-field input {
+  border-color: rgba(168, 85, 247, 0.34);
+  background: #171b2a;
+  color: #f8fafc;
+  box-shadow: inset 0 1px 0 rgba(248, 250, 252, 0.04);
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-field input:focus-visible,
+html.theme-dark ion-modal.history-edit-modal .edit-field input:focus-visible {
+  border-color: #c084fc;
+  box-shadow:
+    0 0 0 2px rgba(168, 85, 247, 0.26),
+    0 0 0 1px rgba(196, 181, 253, 0.24) inset;
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-field input[type='datetime-local'],
+html.theme-dark ion-modal.history-edit-modal .edit-field input[type='datetime-local'] {
+  color-scheme: dark;
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-cancel,
+html.theme-dark ion-modal.history-edit-modal .edit-cancel {
+  background: #2b3348;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  color: #ddd6fe;
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-actions,
+html.theme-dark ion-modal.history-edit-modal .edit-actions {
+  border-top-color: rgba(192, 132, 252, 0.22);
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-save,
+html.theme-dark ion-modal.history-edit-modal .edit-save {
+  background: linear-gradient(135deg, #c084fc 0%, #a855f7 48%, #7c3aed 100%);
+  color: #0b1020;
+  box-shadow: 0 10px 18px rgba(124, 58, 237, 0.38);
+}
+
+body.theme-dark ion-modal.history-edit-modal .edit-save:disabled,
+html.theme-dark ion-modal.history-edit-modal .edit-save:disabled {
+  background: #4c3a72;
+  color: #ddd6fe;
+}
+
+ion-modal.history-delete-modal {
+  --width: min(440px, calc(100vw - 24px));
+}
+
+ion-modal.history-delete-modal ion-content {
+  --background: var(--app-modal-bg);
+  --color: var(--app-text);
+}
+
+ion-modal.history-delete-modal .delete-header ion-toolbar {
+  --background: var(--app-modal-bg);
+  --border-width: 0 0 1px;
+  --border-color: rgba(239, 68, 68, 0.22);
+  --color: var(--app-text);
+  --min-height: 56px;
+}
+
+ion-modal.history-delete-modal .delete-header ion-title {
+  color: var(--app-text);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+ion-modal.history-delete-modal .delete-body {
+  display: grid;
+  gap: 10px;
+  padding: 18px 16px 16px;
+  background: var(--app-modal-bg);
+}
+
+ion-modal.history-delete-modal .delete-message {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+ion-modal.history-delete-modal .delete-summary {
+  margin: 0;
+  border: 1px solid rgba(124, 58, 237, 0.28);
+  border-radius: 10px;
+  background: rgba(124, 58, 237, 0.08);
+  color: var(--app-text);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 10px;
+}
+
+ion-modal.history-delete-modal .delete-note {
+  margin: 0;
+  font-size: 13px;
+  color: var(--app-muted);
+}
+
+ion-modal.history-delete-modal .delete-acknowledge {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid rgba(124, 58, 237, 0.22);
+  border-radius: 10px;
+  background: rgba(124, 58, 237, 0.05);
+  padding: 10px;
+}
+
+ion-modal.history-delete-modal .delete-acknowledge input {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  accent-color: #dc2626;
+}
+
+ion-modal.history-delete-modal .delete-acknowledge span {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--app-text);
+}
+
+ion-modal.history-delete-modal .delete-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+ion-modal.history-delete-modal .delete-actions button {
+  border: 0;
+  border-radius: 10px;
+  height: 38px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+ion-modal.history-delete-modal .delete-cancel-action {
+  background: #ebe5fa;
+  color: #5b21b6;
+}
+
+ion-modal.history-delete-modal .delete-confirm-action {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 8px 16px rgba(220, 38, 38, 0.28);
+}
+
+ion-modal.history-delete-modal .delete-actions button:disabled {
+  opacity: 0.65;
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-header ion-toolbar,
+html.theme-dark ion-modal.history-delete-modal .delete-header ion-toolbar {
+  --background: linear-gradient(180deg, #171a27 0%, #121522 100%);
+  --border-color: rgba(248, 113, 113, 0.3);
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-header ion-title,
+html.theme-dark ion-modal.history-delete-modal .delete-header ion-title {
+  color: #f8fafc;
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-body,
+html.theme-dark ion-modal.history-delete-modal .delete-body {
+  background: linear-gradient(180deg, #121522 0%, #0f111a 100%);
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-message,
+html.theme-dark ion-modal.history-delete-modal .delete-message {
+  color: #f8fafc;
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-summary,
+html.theme-dark ion-modal.history-delete-modal .delete-summary {
+  border-color: rgba(248, 113, 113, 0.34);
+  background: rgba(127, 29, 29, 0.24);
+  color: #fee2e2;
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-note,
+html.theme-dark ion-modal.history-delete-modal .delete-note {
+  color: #cbd5e1;
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-acknowledge,
+html.theme-dark ion-modal.history-delete-modal .delete-acknowledge {
+  border-color: rgba(248, 113, 113, 0.34);
+  background: rgba(127, 29, 29, 0.2);
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-acknowledge span,
+html.theme-dark ion-modal.history-delete-modal .delete-acknowledge span {
+  color: #fee2e2;
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-cancel-action,
+html.theme-dark ion-modal.history-delete-modal .delete-cancel-action {
+  background: #2b3348;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  color: #e2e8f0;
+}
+
+body.theme-dark ion-modal.history-delete-modal .delete-confirm-action,
+html.theme-dark ion-modal.history-delete-modal .delete-confirm-action {
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 45%, #dc2626 100%);
+  color: #12090a;
+  box-shadow: 0 10px 18px rgba(239, 68, 68, 0.28);
+}
+
+ion-modal.history-filter-modal {
+  --width: min(460px, calc(100vw - 24px));
+}
+
+ion-modal.history-filter-modal ion-content {
+  --background: var(--app-modal-bg);
+  --color: var(--app-text);
+}
+
+ion-modal.history-filter-modal .filter-header ion-toolbar {
+  --background: var(--app-modal-bg);
+  --border-width: 0 0 1px;
+  --border-color: rgba(139, 92, 246, 0.18);
+  --color: var(--app-text);
+  --min-height: 56px;
+}
+
+ion-modal.history-filter-modal .filter-header ion-title {
+  color: var(--app-text);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+ion-modal.history-filter-modal ion-datetime {
+  --background: var(--app-modal-bg);
+  --calendar-day-color: var(--app-text);
+  --calendar-day-color-disabled: #9ca3af;
+  --calendar-day-color-today: var(--app-accent);
+  --calendar-day-background-today: rgba(124, 58, 237, 0.2);
+  --calendar-day-color-active: #ffffff;
+  --calendar-day-background-active: var(--app-accent);
+  --wheel-highlight-background: rgba(124, 58, 237, 0.2);
+  --wheel-fade-background-rgb: 242, 243, 251;
+  margin: 10px 12px 0;
+  border: 1px solid rgba(139, 92, 246, 0.32);
+  border-radius: 16px;
+  color: var(--app-text);
+}
+
+ion-modal.history-filter-modal .filter-time-slot {
+  color: #5b21b6;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+ion-modal.history-filter-modal .filter-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px 16px;
+  border-top: 1px solid rgba(139, 92, 246, 0.2);
+  background: var(--app-modal-bg);
+}
+
+ion-modal.history-filter-modal .filter-modal-actions button {
+  border: 0;
+  border-radius: 10px;
+  min-width: 94px;
+  height: 38px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+ion-modal.history-filter-modal .filter-modal-clear {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+ion-modal.history-filter-modal .filter-modal-cancel {
+  background: #ebe5fa;
+  color: #5b21b6;
+}
+
+ion-modal.history-filter-modal .filter-modal-apply {
+  background: var(--app-accent);
+  color: #ffffff;
+  box-shadow: 0 8px 16px rgba(124, 58, 237, 0.3);
+}
+
+body.theme-dark ion-modal.history-filter-modal .filter-header ion-toolbar,
+html.theme-dark ion-modal.history-filter-modal .filter-header ion-toolbar {
+  --background: linear-gradient(180deg, #171a27 0%, #121522 100%);
+  --border-color: rgba(192, 132, 252, 0.26);
+}
+
+body.theme-dark ion-modal.history-filter-modal .filter-header ion-title,
+html.theme-dark ion-modal.history-filter-modal .filter-header ion-title {
+  color: #f8fafc;
+}
+
+body.theme-dark ion-modal.history-filter-modal ion-datetime,
+html.theme-dark ion-modal.history-filter-modal ion-datetime {
+  --calendar-day-color: #e5e7eb;
+  --calendar-day-color-disabled: #6b7280;
+  --calendar-day-color-today: #c4b5fd;
+  --calendar-day-background-today: rgba(196, 181, 253, 0.24);
+  --calendar-day-color-active: #0b1020;
+  --calendar-day-background-active: #c4b5fd;
+  --wheel-highlight-background: rgba(192, 132, 252, 0.2);
+  --wheel-fade-background-rgb: 15, 17, 25;
+  border-color: rgba(192, 132, 252, 0.34);
+}
+
+body.theme-dark ion-modal.history-filter-modal .filter-time-slot,
+html.theme-dark ion-modal.history-filter-modal .filter-time-slot {
+  color: #ddd6fe;
+}
+
+body.theme-dark ion-modal.history-filter-modal .filter-modal-actions,
+html.theme-dark ion-modal.history-filter-modal .filter-modal-actions {
+  border-top-color: rgba(192, 132, 252, 0.22);
+  background: #111827;
+}
+
+body.theme-dark ion-modal.history-filter-modal .filter-modal-clear,
+html.theme-dark ion-modal.history-filter-modal .filter-modal-clear {
+  background: #293245;
+  color: #e2e8f0;
+}
+
+body.theme-dark ion-modal.history-filter-modal .filter-modal-cancel,
+html.theme-dark ion-modal.history-filter-modal .filter-modal-cancel {
+  background: #2b3348;
+  color: #ddd6fe;
+}
+
+body.theme-dark ion-modal.history-filter-modal .filter-modal-apply,
+html.theme-dark ion-modal.history-filter-modal .filter-modal-apply {
+  background: linear-gradient(135deg, #c084fc 0%, #a855f7 48%, #7c3aed 100%);
+  color: #0b1020;
+}

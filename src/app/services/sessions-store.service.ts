@@ -32,7 +32,12 @@ export class SessionsStoreService {
     }
   }
 
-  async add(startIso: string, endIso: string, hourlyRate: number): Promise<WorkSession> {
+  async add(
+    startIso: string,
+    endIso: string,
+    hourlyRate: number,
+    workCenterId: string
+  ): Promise<WorkSession> {
     await this.ensureLoaded();
     this.validateDateRange(startIso, endIso);
     const normalizedRate = this.normalizeAmount(hourlyRate);
@@ -42,8 +47,10 @@ export class SessionsStoreService {
 
     const durationHours = this.calculateDuration(startIso, endIso);
     const totalIncome = this.calculateTotalIncome(durationHours, normalizedRate);
+    const normalizedWorkCenterId = this.sanitizeWorkCenterId(workCenterId);
     const newSession: WorkSession = {
       id: typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : `${Date.now()}`,
+      workCenterId: normalizedWorkCenterId,
       startIso,
       endIso,
       durationHours,
@@ -72,7 +79,7 @@ export class SessionsStoreService {
     const existing = this.sessionsSignal();
     const index = existing.findIndex((session) => session.id === id);
     if (index < 0) {
-      throw new Error('No se encontro la sesion a editar.');
+      throw new Error('No se encontró la sesión a editar.');
     }
 
     const current = existing[index];
@@ -109,9 +116,17 @@ export class SessionsStoreService {
   private validateDateRange(startIso: string, endIso: string): void {
     const startTime = new Date(startIso).getTime();
     const endTime = new Date(endIso).getTime();
-    if (!Number.isFinite(startTime) || !Number.isFinite(endTime) || endTime < startTime) {
-      throw new Error('La hora de termino debe ser posterior o igual a la hora de inicio.');
+    if (!Number.isFinite(startTime) || !Number.isFinite(endTime) || endTime <= startTime) {
+      throw new Error('La fecha y hora de salida debe ser posterior a la de entrada.');
     }
+  }
+
+  private sanitizeWorkCenterId(value: string): string {
+    const normalized = value.trim();
+    if (!normalized) {
+      throw new Error('Debes seleccionar un centro de trabajo activo.');
+    }
+    return normalized;
   }
 
   private calculateDuration(startIso: string, endIso: string): number {

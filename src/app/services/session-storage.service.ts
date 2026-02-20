@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 
 import { WORK_SESSIONS_STORAGE_KEY, WorkSession } from '../models/work-session';
+import { DEFAULT_WORK_CENTER_ID } from '../models/work-center';
 
 @Injectable({ providedIn: 'root' })
 export class SessionStorageService {
@@ -35,6 +36,7 @@ export class SessionStorageService {
     }
 
     const id = this.getString(value, 'id');
+    const workCenterId = this.getString(value, 'workCenterId') ?? DEFAULT_WORK_CENTER_ID;
     const startIso = this.getString(value, 'startIso');
     const endIso = this.getString(value, 'endIso');
     const createdAtIso = this.getString(value, 'createdAtIso');
@@ -54,6 +56,7 @@ export class SessionStorageService {
 
     return {
       id,
+      workCenterId,
       startIso,
       endIso,
       durationHours: this.normalizeAmount(durationHours),
